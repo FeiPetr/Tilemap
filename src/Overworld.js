@@ -19,7 +19,7 @@ class Overworld extends Phaser.Scene{
         // add layer
         const bgLayer = map.createLayer('Background',tileset,0,0)
         const terrainLayer = map.createLayer('Terrain',tileset,0,0)
-        const treeLayer = map.createLayer('Trees',tileset,0,0);
+        const treeLayer = map.createLayer('Trees',tileset,0,0).setDepth(100);
 
         //add character
         this.slime = this.physics.add.sprite(32, 32,'slime',0);
@@ -35,6 +35,11 @@ class Overworld extends Phaser.Scene{
         });
         this.slime.play('jiggle')
         this.slime.body.setCollideWorldBounds(true)
+
+        terrainLayer.setCollisionByProperty({collides: true})
+        treeLayer.setCollisionByProperty({collides: true})
+        this.physics.add.collider(this.slime,terrainLayer)
+        this.physics.add.collider(this.slime,treeLayer)
 
         this.cameras.main.setBounds(0,0,map.widthInPixels,map.heightInPixels)
         this.cameras.main.startFollow(this.slime,true,0.25,0.25)
